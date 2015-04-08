@@ -1,3 +1,5 @@
+package model
+
 class Lotto {
     int drwNo;
     boolean returnValue;

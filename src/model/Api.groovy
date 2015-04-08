@@ -1,3 +1,5 @@
+package model
+
 @Grab(group = 'org.codehaus.groovy.modules.http-builder', module = 'http-builder', version = '0.7')
 
 import groovy.json.JsonSlurper
@@ -38,6 +40,13 @@ class Api {
                 lotto.totSellamnt = json.totSellamnt
                 c.call(lotto)
             }
+        }
+    }
+
+    static def getNotAppearedNumber(def week, Closure c) {
+        http.get(path: '/lotto645Stat.do', query: [method: 'noViewNumber', drwNo: "${drwNo}"]) { resp, msg ->
+            def html = new XmlSlurper().parseText(resp)
+            html."**".findAll{ it.@class.toString().contains("SmallBallView tbbghn al pl10")}.each {println it}
         }
     }
 }
