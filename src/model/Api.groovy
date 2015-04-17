@@ -10,12 +10,11 @@ import groovyx.net.http.AsyncHTTPBuilder
  */
 class Api {
     static def http = new AsyncHTTPBuilder(
-            poolSize: 4,
+            poolSize: 10,
             uri: 'http://www.nlotto.co.kr',
             contentType: 'text/html')
 
     static def getNumber(def drwNo, Closure c) {
-
         http.get(path: '/common.do', query: [method: 'getLottoNumber', drwNo: "${drwNo}"]) { resp, msg ->
             def jsonSlurper = new JsonSlurper()
             def json = jsonSlurper.parseText(msg.toString())
@@ -40,13 +39,6 @@ class Api {
                 lotto.totSellamnt = json.totSellamnt
                 c.call(lotto)
             }
-        }
-    }
-
-    static def getNotAppearedNumber(def week, Closure c) {
-        http.get(path: '/lotto645Stat.do', query: [method: 'noViewNumber', drwNo: "${drwNo}"]) { resp, msg ->
-            def html = new XmlSlurper().parseText(resp)
-            html."**".findAll{ it.@class.toString().contains("SmallBallView tbbghn al pl10")}.each {println it}
         }
     }
 }

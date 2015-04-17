@@ -1,5 +1,6 @@
+import model.Api
+import model.Lotto
 @Grab(group = 'commons-lang', module = 'commons-lang', version = '2.6')
-@Grab(group = 'joda-time', module = 'joda-time', version = '2.7')
 import org.apache.commons.lang.math.RandomUtils
 
 //variables
@@ -25,17 +26,19 @@ def initCliBuilder() {
         x(longOpt: 'x', 'exclude number(1~45, separated by comma)', required: false, args: 39, valueSeparator: ',')
         f(longOpt: 'f', 'show frequency', required: false)
         d(longOpt: 'd', 'show data', required: false, args: 1)
+        //t(longOpt: 't', 'test', required: false, args: 1)
     }
 }
 
 def executeCommand(def args, Closure c) {
     def opts = cli.parse(args)
-    if (opts.h || opts.help) {
+    if (opts?.h || opts?.help) {
         cli.usage()
         System.exit(0)
     }
 
-    if (opts.d) {
+    if (opts?.d) {
+        pritnln 'd is not null'
         int drwNo = opts.d as int
         Api.getNumber(drwNo) {
             Lotto lotto = (Lotto) it
