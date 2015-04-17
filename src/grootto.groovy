@@ -38,7 +38,7 @@ def executeCommand(def args, Closure c) {
     }
 
     if (opts?.d) {
-        pritnln 'd is not null'
+        println 'd is not null'
         int drwNo = opts.d as int
         Api.getNumber(drwNo) {
             Lotto lotto = (Lotto) it
