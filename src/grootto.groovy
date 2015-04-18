@@ -2,6 +2,7 @@ import model.Api
 import model.Lotto
 @Grab(group = 'commons-lang', module = 'commons-lang', version = '2.6')
 import org.apache.commons.lang.math.RandomUtils
+import util.LottoDateUtil
 
 //variables
 times = 1;
@@ -31,33 +32,44 @@ def initCliBuilder() {
 }
 
 def executeCommand(def args, Closure c) {
-    def opts = cli.parse(args)
+    def opts
+    int drwNo;
+    if ('-d' in args && args.size() == 1) {
+        drwNo = LottoDateUtil.getEpisodeNumber() - 1
+        Api.getNumber(drwNo) {
+            Lotto lotto = (Lotto) it
+            c.call(lotto)
+        }
+    } else {
+        opts = cli.parse(args)
+    }
+
+    if (opts?.d) {
+        drwNo = opts.d as int
+        Api.getNumber(drwNo) {
+            Lotto lotto = (Lotto) it
+            c.call(lotto)
+        }
+    }
+
     if (opts?.h || opts?.help) {
         cli.usage()
         System.exit(0)
     }
 
-    if (opts?.d) {
-        println 'd is not null'
-        int drwNo = opts.d as int
-        Api.getNumber(drwNo) {
-            Lotto lotto = (Lotto) it
-            c.call(lotto)
-        }
-
-    } else {
+    if (!opts?.d) {
         try {
             //if result is 2.37 then remove 0.37 and default value is 1.
             int w = opts.w as int
             times = w.intdiv(1000) > 0 ? w.intdiv(1000) : 1
+            iNums = opts.getProperty("is")?.grep { it }.collect { it as int }.findAll { it in 1..45 }
+            xNums = opts.getProperty("xs")?.grep { it }.collect { it as int }.findAll { it in 1..45 }
+            frq = opts.f
         } catch (Exception e) {
             times = 1
+        } finally {
+            c.call(generateNumber())
         }
-
-        iNums = opts.getProperty("is")?.grep { it }.collect { it as int }.findAll { it in 1..45 }
-        xNums = opts.getProperty("xs")?.grep { it }.collect { it as int }.findAll { it in 1..45 }
-        frq = opts.f
-        c.call(generateNumber())
     }
 }
 
@@ -82,7 +94,6 @@ def generateNumber() {
                 }
             }
         }
-
         timesMap[it] = numList
         numList = []
     }
@@ -127,7 +138,7 @@ def display(def resultMap) {
     println '-' * 30
     resultMap.each { key, value ->
         times = key + 1
-        println "${times} > ${value.sort()}"
+        println "${times} > ${value.sort()} | ${value.sum()}"
 
         if (frq) {
             value.each {
