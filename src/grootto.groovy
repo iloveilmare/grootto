@@ -35,7 +35,7 @@ def executeCommand(def args, Closure c) {
     def opts
     int drwNo;
     if ('-d' in args && args.size() == 1) {
-        drwNo = LottoDateUtil.getDrawNumber() - 1
+        drwNo = LottoDateUtil.getDrawNumber()
         Api.getNumber(drwNo) {
             Lotto lotto = (Lotto) it
             c.call(lotto)
