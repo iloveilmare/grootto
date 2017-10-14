@@ -1,4 +1,4 @@
-![grootto.png](/grootto.png)
+![grootto.png](/image/grootto.png)
 
 
 
