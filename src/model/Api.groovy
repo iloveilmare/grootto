@@ -11,7 +11,7 @@ import groovyx.net.http.AsyncHTTPBuilder
 class Api {
     static def http = new AsyncHTTPBuilder(
             poolSize: 10,
-            uri: 'http://www.nlotto.co.kr',
+            uri: 'https://www.dhlottery.co.kr/',
             contentType: 'text/html')
 
     static def getNumber(def drwNo, Closure c) {
