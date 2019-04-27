@@ -20,8 +20,9 @@ assert LottoDateUtil.getDrawNumber(2015, 4, 11) == 645
 
 //Api test
 Api.getNumber(LottoDateUtil.getDrawNumber(2002, 12, 7)) {
-    Lotto lotto = it;
+    Lotto lotto = it
     println lotto.numbers
     //1회차 당첨번호
     assert lotto.numbers == ['10', '23', '29', '33', '37', '40']
+    System.exit(0)
 }

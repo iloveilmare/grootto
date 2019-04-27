@@ -1,6 +1,6 @@
 import model.Api
 import model.Lotto
-@Grab(group = 'commons-lang', module = 'commons-lang', version = '2.6')
+@Grab(group = 'commons-lang', module = 'commons-lang', version = '2.4')
 import org.apache.commons.lang.math.RandomUtils
 import util.LottoDateUtil
 
@@ -27,6 +27,7 @@ def initCliBuilder() {
         x(longOpt: 'x', 'exclude number(1~45, separated by comma)', required: false, args: 39, valueSeparator: ',')
         f(longOpt: 'f', 'show frequency', required: false)
         d(longOpt: 'd', 'show data', required: false, args: 1)
+	l(longOpt: 'l', 'show latest draw number', required: false)
         //t(longOpt: 't', 'test', required: false, args: 1)
     }
 }
@@ -50,6 +51,12 @@ def executeCommand(def args, Closure c) {
                 c.call(lotto)
             }
         }
+
+	if(opts?.l) {
+	    def drawNumber = LottoDateUtil.getDrawNumber()
+	    println("${drawNumber} 회")
+	    System.exit(0)
+	}
 
         if (opts?.h || opts?.help) {
             cli.usage()
