@@ -129,7 +129,11 @@ def getRandomNumber() {
 
 def display(Lotto lotto) {
     println '\n' + "${lotto.drwNo + '회 / ' + lotto.drwNoDate}"
-    println "${'1등 당첨금 : ' + lotto.firstWinamnt + ' / ' + lotto.firstPrzwnerCo + '명'}"
+
+    println """${'1등 당첨금 : ' + 
+	     String.format('%, d', lotto.firstWinamnt) + ' / ' + 
+	     lotto.firstPrzwnerCo + '명'}"""
+
     println "${lotto.numbers}" + ' + ' + "${lotto.bnusNo}" + '\n'
     System.exit(0)
 }
